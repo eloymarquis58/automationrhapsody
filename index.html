@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDN Automation Rhapsody</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #3b82f6;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --success: #10b981;
+            --gray: #64748b;
+        }
+        
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+        }
+        
+        .logo-text h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1.1rem;
+        }
+        
+        nav a:hover {
+            color: var(--accent);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 4rem 0;
+            background: linear-gradient(rgba(30, 41, 59, 0.9), rgba(30, 64, 175, 0.9)), url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+        }
+        
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            border: 2px solid var(--accent);
+        }
+        
+        .cta-button:hover {
+            background-color: transparent;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 5rem 0;
+            background-color: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        
+        .section-title p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid var(--accent);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* CDN Visualization */
+        .visualization {
+            padding: 5rem 0;
+            background-color: #f8fafc;
+        }
+        
+        .visualization-container {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+        
+        .visualization-diagram {
+            flex: 1;
+            min-height: 400px;
+            position: relative;
+        }
+        
+        .cdn-node {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s;
+            cursor: pointer;
+        }
+        
+        .cdn-node:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+        
+        .origin-server {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            top: 50%;
+            left: 10%;
+            transform: translateY(-50%);
+        }
+        
+        .edge-node {
+            background: linear-gradient(135deg, var(--success), #0da271);
+        }
+        
+        .user {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            width: 60px;
+            height: 60px;
+        }
+        
+        .cdn-line {
+            position: absolute;
+            background-color: var(--accent);
+            height: 3px;
+            transform-origin: left center;
+            opacity: 0.5;
+        }
+        
+        .visualization-content {
+            flex: 1;
+        }
+        
+        .visualization-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+        
+        /* Automation Metrics */
+        .metrics {
+            padding: 5rem 0;
+            background-color: white;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .metric-card {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--light);
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .metric-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-label {
+            font-size: 1.2rem;
+            color: var(--gray);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-section a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: var(--accent);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .visualization-container {
+                flex-direction: column;
+            }
+            
+            .visualization-diagram {
+                width: 100%;
+                min-height: 350px;
+            }
+            
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .mobile-menu {
+                display: none;
+                width: 100%;
+                margin-top: 1rem;
+            }
+            
+            .mobile-menu.active {
+                display: block;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>CDN Automation Rhapsody</h1>
+                        <p>Orchestrating Content Delivery Networks</p>
+                    </div>
+                </div>
+                
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <nav class="desktop-menu">
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#visualization">How It Works</a></li>
+                        <li><a href="#metrics">Metrics</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+            
+            <div class="mobile-menu" id="mobileMenu">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#visualization">How It Works</a></li>
+                    <li><a href="#metrics">Metrics</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h2>Automated CDN Orchestration</h2>
+            <p>Experience the symphony of automated content delivery networks that dynamically optimize performance, reduce latency, and ensure seamless global content distribution.</p>
+            <a href="#visualization" class="cta-button">See How It Works</a>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Key Features</h2>
+                <p>Discover the powerful capabilities of CDN Automation Rhapsody that revolutionize content delivery</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Intelligent Automation</h3>
+                    <p>Self-learning algorithms that automatically optimize CDN configurations based on traffic patterns, user locations, and content types.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3>Real-Time Optimization</h3>
+                    <p>Dynamic routing and caching decisions made in real-time to ensure the fastest possible content delivery to every user.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <h3>Global Edge Network</h3>
+                    <p>Leverage a worldwide network of edge servers strategically placed to minimize latency and maximize throughput.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CDN Visualization -->
+    <section class="visualization" id="visualization">
+        <div class="container">
+            <div class="section-title">
+                <h2>CDN Automation in Action</h2>
+                <p>Visualize how our automated CDN intelligently routes content from origin to users</p>
+            </div>
+            
+            <div class="visualization-container">
+                <div class="visualization-diagram" id="cdnDiagram">
+                    <!-- CDN nodes and connections will be generated by JavaScript -->
+                </div>
+                
+                <div class="visualization-content">
+                    <h3>How CDN Automation Works</h3>
+                    <p>Our system automatically detects user location, network conditions, and content requirements to determine the optimal delivery path.</p>
+                    <p>When a user requests content, the system evaluates multiple factors:</p>
+                    <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                        <li>User geographic location</li>
+                        <li>Current network congestion</li>
+                        <li>Content size and type</li>
+                        <li>Edge server availability and load</li>
+                    </ul>
+                    <p style="margin-top: 1.5rem;">The automated system then selects the most efficient route, caching content at edge nodes for future requests from nearby users.</p>
+                    <a href="#" class="cta-button" style="margin-top: 1.5rem;">Start Automation</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Automation Metrics -->
+    <section class="metrics" id="metrics">
+        <div class="container">
+            <div class="section-title">
+                <h2>Automation Performance Metrics</h2>
+                <p>Real-time metrics showcasing the impact of CDN automation</p>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="latencyMetric">42ms</div>
+                    <div class="metric-label">Avg. Latency Reduction</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value" id="throughputMetric">98.7%</div>
+                    <div class="metric-label">Cache Hit Rate</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value" id="optimizationMetric">67%</div>
+                    <div class="metric-label">Routing Optimizations/Hour</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value" id="savingsMetric">41%</div>
+                    <div class="metric-label">Bandwidth Savings</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>CDN Automation Rhapsody</h3>
+                    <p>Orchestrating the future of content delivery through intelligent automation and global network optimization.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#visualization">How It Works</a></li>
+                        <li><a href="#metrics">Metrics</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> info@cdnrhapsody.com</li>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-map-marker-alt"></i> San Francisco, CA</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 CDN Automation Rhapsody. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+            });
+        });
+        
+        // CDN Visualization Diagram
+        const cdnDiagram = document.getElementById('cdnDiagram');
+        
+        // Create CDN nodes
+        const nodes = [
+            { id: 'origin', type: 'origin-server', label: 'Origin', top: '50%', left: '10%' },
+            { id: 'edge1', type: 'edge-node', label: 'Edge 1', top: '20%', left: '30%' },
+            { id: 'edge2', type: 'edge-node', label: 'Edge 2', top: '50%', left: '30%' },
+            { id: 'edge3', type: 'edge-node', label: 'Edge 3', top: '80%', left: '30%' },
+            { id: 'user1', type: 'user', label: 'User 1', top: '10%', left: '70%' },
+            { id: 'user2', type: 'user', label: 'User 2', top: '35%', left: '85%' },
+            { id: 'user3', type: 'user', label: 'User 3', top: '65%', left: '85%' },
+            { id: 'user4', type: 'user', label: 'User 4', top: '90%', left: '70%' }
+        ];
+        
+        // Create connections between nodes
+        const connections = [
+            { from: 'origin', to: 'edge1' },
+            { from: 'origin', to: 'edge2' },
+            { from: 'origin', to: 'edge3' },
+            { from: 'edge1', to: 'user1' },
+            { from: 'edge1', to: 'user2' },
+            { from: 'edge2', to: 'user2' },
+            { from: 'edge2', to: 'user3' },
+            { from: 'edge3', to: 'user3' },
+            { from: 'edge3', to: 'user4' }
+        ];
+        
+        // Draw connections
+        connections.forEach(conn => {
+            const fromNode = nodes.find(n => n.id === conn.from);
+            const toNode = nodes.find(n => n.id === conn.to);
+            
+            if (fromNode && toNode) {
+                const line = document.createElement('div');
+                line.className = 'cdn-line';
+                
+                // Calculate line position and length
+                const fromX = parseFloat(fromNode.left) / 100 * cdnDiagram.offsetWidth;
+                const fromY = parseFloat(fromNode.top) / 100 * cdnDiagram.offsetHeight;
+                const toX = parseFloat(toNode.left) / 100 * cdnDiagram.offsetWidth;
+                const toY = parseFloat(toNode.top) / 100 * cdnDiagram.offsetHeight;
+                
+                const length = Math.sqrt(Math.pow(toX - fromX, 2) + Math.pow(toY - fromY, 2));
+                const angle = Math.atan2(toY - fromY, toX - fromX) * 180 / Math.PI;
+                
+                line.style.width = `${length}px`;
+                line.style.left = `${fromX}px`;
+                line.style.top = `${fromY}px`;
+                line.style.transform = `rotate(${angle}deg)`;
+                
+                cdnDiagram.appendChild(line);
+            }
+        });
+        
+        // Draw nodes
+        nodes.forEach(node => {
+            const nodeElement = document.createElement('div');
+            nodeElement.className = `cdn-node ${node.type}`;
+            nodeElement.textContent = node.label;
+            nodeElement.style.top = node.top;
+            nodeElement.style.left = node.left;
+            
+            // Add click interaction
+            nodeElement.addEventListener('click', () => {
+                const metricCards = document.querySelectorAll('.metric-card');
+                metricCards.forEach(card => {
+                    card.style.transform = 'scale(1.05)';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                    }, 300);
+                });
+                
+                // Update metrics with random values to simulate interaction
+                document.getElementById('latencyMetric').textContent = `${Math.floor(Math.random() * 20) + 35}ms`;
+                document.getElementById('throughputMetric').textContent = `${(Math.random() * 2 + 97).toFixed(1)}%`;
+                document.getElementById('optimizationMetric').textContent = `${Math.floor(Math.random() * 20) + 60}%`;
+            });
+            
+            cdnDiagram.appendChild(nodeElement);
+        });
+        
+        // Animate metrics
+        function animateMetrics() {
+            const metrics = [
+                { id: 'latencyMetric', start: 42, end: 38, unit: 'ms' },
+                { id: 'throughputMetric', start: 98.7, end: 99.2, unit: '%' },
+                { id: 'optimizationMetric', start: 67, end: 72, unit: '%' },
+                { id: 'savingsMetric', start: 41, end: 44, unit: '%' }
+            ];
+            
+            metrics.forEach(metric => {
+                const element = document.getElementById(metric.id);
+                let current = metric.start;
+                const target = metric.end;
+                const increment = (target - current) / 100;
+                let count = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    count++;
+                    
+                    if (metric.unit === '%') {
+                        element.textContent = `${current.toFixed(1)}${metric.unit}`;
+                    } else {
+                        element.textContent = `${Math.round(current)}${metric.unit}`;
+                    }
+                    
+                    if (count >= 100) {
+                        clearInterval(timer);
+                    }
+                }, 20);
+            });
+            
+            // Repeat animation every 10 seconds
+            setTimeout(animateMetrics, 10000);
+        }
+        
+        // Start metric animation after page load
+        window.addEventListener('load', () => {
+            setTimeout(animateMetrics, 2000);
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
